@@ -30,6 +30,6 @@ R/ El codigo tiene una sintaxis correcta y la herramienta helgrind nos informa d
 
 
 **Nota**: Se adjuntan los códigos para facilitar en análisis.
-**Nota**: Se adjuntaran las imagenes al repositorio
+**Nota**: Se adjuntaran las imagenes al classroom
 
 
