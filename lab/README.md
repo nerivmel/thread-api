@@ -5,13 +5,13 @@ En esta sección escribiremos algunos programas multi-hilo y usaremos una herram
 ## Questions ##
 
 1. Primero codifique ```main-race.c```. Examine el código de manera que usted pueda ver (ojalá de manera obvia) un data race en el código. Ahora ejecute ```helgrind``` (al teclear ```valgrind --tool=helgrind ./main-race```) y vea como este programa reporta los *data races*. ¿Se muestran las líneas de código involucradas?, ¿Qué otra información entrega este programa?
-
+R/ Imprime las direcciones de la data race y se ve como el hilo 1 y el 2 están involucrados, nos muestra el contador de errores y la variable que nos está generando la data race. 
 
 2. ¿Qué ocurre cuando usted elimina una de las líneas que generan problemas en el código? Ahora agrege un lock alrededor de las actualizaciones de la variable compartida, y entonces alrededor de ambas. ¿Qué reporta ```helgrind``` en cada uno de estos casos?
-
+R/ En cada uno de los casos muestra simplemente que ya no existe esa condición de carrera entre los hilos, hasta llegar al punto de no mostrar ningún error cuando están todos los locks establecidos alrededor de las variables de acceso global involucradas.
 
 3. Ahora observe ```main-deadlock.c```. Examine el código. Este código tiene un problema conocido como deadlock. ¿Puede ver que problema podrá este tener?
-
+R/El problema que puede ocurrir es que va a llegar un punto en que no habrá nada que despierte a los hilos dormidos, y se bloquean mutuamente; cuando el hilo p1 adquiere el lock de m1 y realiza inmeadiatamente un cambio de contexto; así mismo el hilo p2 adquiere el lock de m2, luego el hilo p2 intenta adquirir el lock de m1 el cual ya se encuentra bloqueado por lo cual cambia de contexto hacia p1; y el hilo p1 procede adquirir el lock de m2, el cual ya se encuentra bloqueado por el hilo p2. Es decir, cada hilo se encuentra a la espera de un recurso que libera el otro hilo.
 
 4. Ahora ejecute ```helgrind``` en este código. ¿Qué reporta helgrind?
 
