@@ -14,15 +14,19 @@ R/ En cada uno de los casos muestra simplemente que ya no existe esa condición 
 R/El problema que puede ocurrir es que va a llegar un punto en que no habrá nada que despierte a los hilos dormidos, y se bloquean mutuamente; cuando el hilo p1 adquiere el lock de m1 y realiza inmeadiatamente un cambio de contexto; así mismo el hilo p2 adquiere el lock de m2, luego el hilo p2 intenta adquirir el lock de m1 el cual ya se encuentra bloqueado por lo cual cambia de contexto hacia p1; y el hilo p1 procede adquirir el lock de m2, el cual ya se encuentra bloqueado por el hilo p2. Es decir, cada hilo se encuentra a la espera de un recurso que libera el otro hilo.
 
 4. Ahora ejecute ```helgrind``` en este código. ¿Qué reporta helgrind?
+R/ Helgrind reporta una violacion de orden en adquisicion de los bloqueos 
 
 
 5. Ahora ejecute ```helgrind``` en ```main-deadlock-global.c```. Examine el código. ¿Tiene este el mismo problema que ```main-deadlock.c```? ¿Muestra ```helgrind``` el mismo reporte de error? ¿Qué dice esto a cerca de herramientas como ```helgrind```?
+R/ Cuando analizamos el codigo se identifica que se utiliza el mutex al rededor de la seccion critica lo cual controlaria el problema que observamso en el punto anterior, sin embargo al ejecutar con la herramienta helgrind nos reporta aparentemente un error similar, lo cual no tiene sentido ya que estamos controlando el problema que se presenta en la sección critica atravez de los mutex, esto nos indica que estas herramientas no son tan confiables como aparentan ser.  
 
 
 6. Ahora observe ```main-signal.c```. Este código usa una variable (```done```) para señalar que el hijo esta hecho y que el padre puede continuar. ¿Por qué este códido es ineficiente? (En que termina el padre dedicando su tiempo, si el hijo toma una gran cantidad de tiempo en completarse).
+R/ Si el scheduler decide ejecutar al padre antes que el hijo logre cambiar el estado de la variable "done" entonces el padre consumira el quantum completo de la cpu o hasta que el scheduler decida hacer el cambio de contexto analizando una variable que no va a cambiar 
 
 
 7. Ahora ejecute ```helgrind``` para este programa. ¿Qué reporta helgrind?, ¿Es correcto el código?
+R/ El codigo tiene una sintaxis correcta y la herramienta helgrind nos informa de un posible data race sobre la variable done
 
 
 **Nota**: Se adjuntan los códigos para facilitar en análisis.
